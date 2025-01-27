@@ -7,36 +7,55 @@ Author: Xiaochen Wang
 Main module that demonstrates the Record class.
 """
 
+import csv
 from src.record import Record
+
+def read_energy_data(file_path):
+    """
+    Read energy export data from CSV file.
+    Args:
+        file_path: Path to the CSV file
+    Returns:
+        list: A list of Record objects containing the data
+    """
+    records = []
+    try:
+        with open(file_path, 'r') as file:
+            csv_reader = csv.reader(file)
+            next(csv_reader)  # Skip header row
+
+            # Read first 10 records
+            for _ in range(10):
+                row = next(csv_reader)
+                record = Record(*row)
+                records.append(record)
+
+    except FileNotFoundError:
+        print(f"Error: File '{file_path}' not found.")
+    except Exception as e:
+        print(f"Error reading file: {str(e)}")
+
+    return records
 
 
 def main():
-    """Main function to demonstrate Record class."""
+    """
+    Main function to run the program.
+    Reads data from CSV file and displays records.
+    """
     print("=" * 50)
     print("Energy Export Data Analysis")
     print("Author: Xiaochen Wang")
     print("=" * 50)
 
-    # Create a sample record
-    sample_record = Record(
-        period="2025-01",
-        year="2025",
-        month="01",
-        product="Crude Oil",
-        origin="Alberta",
-        destination="United States",
-        mode="Pipeline",
-        volume_m3="1000000",
-        volume_bbl="6289811",
-        value_cad="50000000",
-        value_usd="37500000",
-        price_cad_cents_per_l="50",
-        price_usd_cents_per_gal="189"
-    )
+    # Read data from CSV file
+    data_file = "data/natural-gas-liquids-exports-monthly1.csv"
+    records = read_energy_data(data_file)
 
-    # Display the record
-    print("\nSample Record:")
-    print(sample_record)
+    if records:
+        print(f"\nSuccessfully loaded {len(records)} records.")
+    else:
+        print("No records were loaded.")
 
 
 if __name__ == "__main__":
