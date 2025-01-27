@@ -45,9 +45,10 @@ def main():
     Reads data from CSV file and displays records.
     """
     print("=" * 50)
-    print("Energy Export Data Analysis")
+    print("CST8002 Energy Export Data Analysis")
     print("Author: Xiaochen Wang")
-    print("=" * 50)
+    print("Natural Gas Liquids Export Data")
+    print("=" * 50 + "\n")
 
     # Read data from CSV file
     data_file = "data/natural-gas-liquids-exports-monthly.csv"
@@ -62,6 +63,9 @@ def main():
             print("-" * 50)
     else:
         print("No records were loaded.")
+
+    print("\nCoded by: Xiaochen Wang")
+    print("=" * 50)
 
 
 if __name__ == "__main__":
