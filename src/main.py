@@ -10,6 +10,7 @@ Main module that demonstrates the Record class.
 import csv
 from src.record import Record
 
+
 def read_energy_data(file_path):
     """
     Read energy export data from CSV file.
@@ -49,11 +50,16 @@ def main():
     print("=" * 50)
 
     # Read data from CSV file
-    data_file = "data/natural-gas-liquids-exports-monthly1.csv"
+    data_file = "data/natural-gas-liquids-exports-monthly.csv"
     records = read_energy_data(data_file)
 
     if records:
-        print(f"\nSuccessfully loaded {len(records)} records.")
+        print(f"Successfully loaded {len(records)} records:")
+        # Loop through and display each record
+        for i, record in enumerate(records, 1):
+            print(f"\nRecord #{i}:")
+            print(record)
+            print("-" * 50)
     else:
         print("No records were loaded.")
 
