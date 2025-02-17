@@ -1,72 +1,36 @@
 """
 CST8002 Programming Language Research Project
 Professor: Stanley Pieda
-Due Date: January 26, 2025
+Due Date: February 16, 2025
 Author: Xiaochen Wang
 
-Main module that demonstrates the Record class.
+Main module that implements MVC pattern for energy export data management.
 """
 
-import csv
-from src.models.record import Record
-
-
-def read_energy_data(file_path):
-    """
-    Read energy export data from CSV file.
-    Args:
-        file_path: Path to the CSV file
-    Returns:
-        list: A list of Record objects containing the data
-    """
-    records = []
-    try:
-        with open(file_path, 'r') as file:
-            csv_reader = csv.reader(file)
-            next(csv_reader)  # Skip header row
-
-            # Read first 10 records
-            for _ in range(10):
-                row = next(csv_reader)
-                record = Record(*row)
-                records.append(record)
-
-    except FileNotFoundError:
-        print(f"Error: File '{file_path}' not found.")
-    except Exception as e:
-        print(f"Error reading file: {str(e)}")
-
-    return records
-
+from src.views.console_view import ConsoleView
+from src.services.data_service import DataService
+from src.controllers.record_controller import RecordController
 
 def main():
     """
-    Main function to run the program.
-    Reads data from CSV file and displays records.
+    Main program entry point.
+    Initializes MVC components and starts the application.
     """
-    print("=" * 50)
-    print("CST8002 Energy Export Data Analysis")
-    print("Author: Xiaochen Wang")
-    print("Natural Gas Liquids Export Data")
-    print("=" * 50 + "\n")
+    # Initialize MVC components
+    view = ConsoleView()
+    service = DataService()
+    controller = RecordController(view, service)
 
-    # Read data from CSV file
-    data_file = "data/natural-gas-liquids-exports-monthly.csv"
-    records = read_energy_data(data_file)
-
-    if records:
-        print(f"Successfully loaded {len(records)} records:")
-        # Loop through and display each record
-        for i, record in enumerate(records, 1):
-            print(f"\nRecord #{i}:")
-            print(record)
-            print("-" * 50)
-    else:
-        print("No records were loaded.")
-
-    print("\nCoded by: Xiaochen Wang")
-    print("=" * 50)
-
+    # Start the application
+    try:
+        controller.run()
+    except KeyboardInterrupt:
+        print("\nProgram terminated by user.")
+    except Exception as e:
+        print(f"\nAn error occurred: {str(e)}")
+    finally:
+        print("\nThank you for using the program!")
+        print(f"Program by Xiaochen Wang")
 
 if __name__ == "__main__":
     main()
