@@ -8,7 +8,7 @@ Main module that demonstrates the Record class.
 """
 
 import csv
-from src.record import Record
+from src.models.record import Record
 
 
 def read_energy_data(file_path):
