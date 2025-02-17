@@ -43,3 +43,10 @@ class Record:
                 f"Value (USD): {self.value_usd}\n"
                 f"Price (CAD cents/L): {self.price_cad_cents_per_l}\n"
                 f"Price (USD cents/gal): {self.price_usd_cents_per_gal}")
+
+    def to_csv_row(self):
+        """Convert record to CSV format"""
+        return f"{self.period},{self.year},{self.month},{self.product},{self.origin}," \
+               f"{self.destination},{self.mode},{self.volume_m3},{self.volume_bbl}," \
+               f"{self.value_cad},{self.value_usd},{self.price_cad_cents_per_l}," \
+               f"{self.price_usd_cents_per_gal}"
