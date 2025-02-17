@@ -7,9 +7,14 @@ Author: Xiaochen Wang
 Main module that implements MVC pattern for energy export data management.
 """
 
-from src.views.console_view import ConsoleView
-from src.services.data_service import DataService
-from src.controllers.record_controller import RecordController
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from views.console_view import ConsoleView
+from services.data_service import DataService
+from controllers.record_controller import RecordController
 
 def main():
     """
