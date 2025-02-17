@@ -8,6 +8,8 @@ This module contains the RecordController class for managing business logic.
 """
 
 from src.models.record import Record
+from src.services.data_service import DataService
+from src.views.console_view import ConsoleView
 
 
 class RecordController:
@@ -53,7 +55,10 @@ class RecordController:
 
     def load_data(self):
         """Load or reload data from file."""
-        filename = input("\nEnter filename (press Enter for default 'dataset.csv'): ")
+        filename = input("\nEnter filename (press Enter for default 'natural-gas-liquids-exports-monthly.csv'): ")
+        if filename and not filename.startswith('data/'):
+            # add data/ prefix if not provided
+            filename = f"data/{filename}"
         if self.service.read_file(filename if filename else None):
             print("Data loaded successfully!")
         else:
@@ -72,11 +77,38 @@ class RecordController:
         self.view.display_records(self.service.records)
 
     def add_record(self):
-        """Add a new record to the collection."""
-        record_data = self.view.get_record_input()
-        new_record = Record(**record_data)
-        self.service.records.append(new_record)
-        print("\nRecord added successfully!")
+        """Add a new record."""
+        if len(self.service.records) >= 100:
+            print("\nMaximum number of records (100) reached. Cannot add more records.")
+            return
+
+        print("\nEnter record details:")
+        try:
+            period = input("Period (e.g., 01/01/1990): ")
+            year = input("Year (e.g., 1990): ")
+            month = input("Month (e.g., January): ")
+            product = input("Product (e.g., Butane): ")
+            origin = input("Origin (e.g., Alberta): ")
+            destination = input("Destination / PADD: ")
+            mode = input("Mode of Transportation: ")
+            volume_m3 = input("Volume (m3): ")
+            volume_bbl = input("Volume (bbl): ")
+            value_cad = input("Value (CN$): ")
+            value_usd = input("Value (US$): ")
+            price_cad_cents_per_l = input("Price (CN cents/L): ")
+            price_usd_cents_per_gal = input("Price (US cents/gallon): ")
+
+            record = Record(
+                period, year, month, product, origin, destination, mode,
+                volume_m3, volume_bbl, value_cad, value_usd,
+                price_cad_cents_per_l, price_usd_cents_per_gal
+            )
+            
+            self.service.records.append(record)
+            print("\nRecord added successfully!")
+            
+        except Exception as e:
+            print(f"\nError adding record: {str(e)}")
 
     def edit_record(self):
         """Edit an existing record."""
@@ -97,18 +129,57 @@ class RecordController:
             print("\nInvalid input. Please enter a number.")
 
     def delete_record(self):
-        """Delete an existing record."""
+        """Delete a record by ID."""
         if not self.service.records:
             print("\nNo records to delete.")
             return
 
-        self.display_records()
+        print("\nCurrent Records:")
+        for i, record in enumerate(self.service.records, 1):
+            print(f"\nRecord #{i}")
+            print(f"Record ID: {record.id}")
+            print("Period:", record.period)
+            print("Year:", record.year)
+            print("Product:", record.product)
+            print("Origin:", record.origin)
+            print("Mode:", record.mode)  # add more fields for identification
+            print("-" * 30)
+
+        print("\nProgram by Xiaochen Wang")
+        
         try:
-            index = int(input("\nEnter record number to delete (1-{}): ".format(len(self.service.records)))) - 1
-            if 0 <= index < len(self.service.records):
-                del self.service.records[index]
-                print("\nRecord deleted successfully!")
-            else:
-                print("\nInvalid record number.")
-        except ValueError:
-            print("\nInvalid input. Please enter a number.")
+            record_id = input("\nEnter the record ID to delete: ").strip()
+            print(f"\nAttempting to delete record with ID: {record_id}")
+            
+            # print the number of records before deletion
+            print(f"Records before deletion: {len(self.service.records)}")
+            
+            found = False
+            for i, record in enumerate(self.service.records):
+                print(f"Checking record #{i+1}:")
+                print(f"  ID: {record.id}")
+                print(f"  Period: {record.period}")
+                print(f"  Product: {record.product}")
+                
+                if record.id == record_id:
+                    # print the detailed information of the record to delete
+                    print(f"\nFound matching record at position {i+1}:")
+                    print(f"  Current record: {record.period}, {record.product}, {record.origin}")
+                    
+                    deleted_record = self.service.records.pop(i)
+                    print(f"\nSuccessfully deleted record #{i+1}:")
+                    print(deleted_record)
+                    found = True
+                    
+                    # print the number of records after deletion
+                    print(f"Records after deletion: {len(self.service.records)}")
+                    break
+            
+            if not found:
+                print(f"\nRecord with ID {record_id} was not found.")
+            
+        except Exception as e:
+            print(f"\nError deleting record: {str(e)}")
+            print(f"Error type: {type(e)}")
+            import traceback
+            traceback.print_exc()
