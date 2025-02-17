@@ -7,6 +7,8 @@ Author: Xiaochen Wang
 This module contains the Record class.
 """
 
+import uuid
+
 class Record:
     """A class to represent energy export data records."""
 
@@ -14,6 +16,7 @@ class Record:
                  mode, volume_m3, volume_bbl, value_cad, value_usd,
                  price_cad_cents_per_l, price_usd_cents_per_gal):
         """Initialize a new Record instance."""
+        self.id = str(uuid.uuid4())
         self.period = period
         self.year = year
         self.month = month
@@ -29,7 +32,7 @@ class Record:
         self.price_usd_cents_per_gal = price_usd_cents_per_gal
 
     def __str__(self):
-        """Return a string representation of the Record."""
+        """Return a string representation of the record."""
         return (f"Period: {self.period}\n"
                 f"Year: {self.year}\n"
                 f"Month: {self.month}\n"
@@ -39,10 +42,10 @@ class Record:
                 f"Mode: {self.mode}\n"
                 f"Volume (m3): {self.volume_m3}\n"
                 f"Volume (bbl): {self.volume_bbl}\n"
-                f"Value (CAD): {self.value_cad}\n"
-                f"Value (USD): {self.value_usd}\n"
-                f"Price (CAD cents/L): {self.price_cad_cents_per_l}\n"
-                f"Price (USD cents/gal): {self.price_usd_cents_per_gal}")
+                f"Value (CN$): {self.value_cad}\n"
+                f"Value (US$): {self.value_usd}\n"
+                f"Price (CN cents/L): {self.price_cad_cents_per_l}\n"
+                f"Price (US cents/gallon): {self.price_usd_cents_per_gal}")
 
     def to_csv_row(self):
         """Convert record to CSV format"""
