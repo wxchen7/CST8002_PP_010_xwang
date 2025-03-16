@@ -1,21 +1,25 @@
 """
 CST8002 Programming Language Research Project
 Professor: Stanley Pieda
-Due Date: January 26, 2025
+Due Date: March 16, 2025
 Author: Xiaochen Wang
 
-This module contains the Record class.
+This module contains the base Record class for energy export data management.
+Implements polymorphic behavior for different display formats.
 """
 
 import uuid
 
 class Record:
-    """A class to represent energy export data records."""
+    """
+    Base class for energy export records.
+    Provides foundation for polymorphic display formatting.
+    """
 
     def __init__(self, period, year, month, product, origin, destination,
                  mode, volume_m3, volume_bbl, value_cad, value_usd,
                  price_cad_cents_per_l, price_usd_cents_per_gal):
-        """Initialize a new Record instance."""
+        """Initialize a new Record instance with the provided data."""
         self.id = str(uuid.uuid4())
         self.period = period
         self.year = year
@@ -46,6 +50,16 @@ class Record:
                 f"Value (US$): {self.value_usd}\n"
                 f"Price (CN cents/L): {self.price_cad_cents_per_l}\n"
                 f"Price (US cents/gallon): {self.price_usd_cents_per_gal}")
+
+    def format_data(self):
+        """
+        Base method for polymorphic data formatting.
+        This method will be overridden by subclasses to provide different display formats.
+
+        Returns:
+            str: Formatted string representation of the record
+        """
+        return self.__str__()
 
     def to_csv_row(self):
         """Convert record to CSV format"""
