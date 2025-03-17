@@ -1,10 +1,11 @@
 """
 CST8002 Programming Language Research Project
 Professor: Stanley Pieda
-Due Date: February 16, 2025
+Due Date: March 16, 2025
 Author: Xiaochen Wang
 
 This module contains the RecordController class for managing business logic.
+Supports polymorphic record handling and display.
 """
 
 from src.models.record import Record
@@ -40,14 +41,16 @@ class RecordController:
             elif choice == '2':
                 self.save_data()
             elif choice == '3':
-                self.display_records()
+                self.display_records("detailed")
             elif choice == '4':
-                self.add_record()
+                self.display_records("summary")
             elif choice == '5':
-                self.edit_record()
+                self.add_record()
             elif choice == '6':
-                self.delete_record()
+                self.edit_record()
             elif choice == '7':
+                self.delete_record()
+            elif choice == '8':
                 print("\nExiting program...")
                 break
             else:
@@ -72,38 +75,40 @@ class RecordController:
         else:
             print("\nFailed to save data.")
 
-    def display_records(self):
-        """Display all records."""
-        self.view.display_records(self.service.records)
+    def display_records(self, format_type="detailed"):
+        """
+        Display records in specified format.
+        
+        Args:
+            format_type: String indicating display format ('detailed' or 'summary')
+        """
+        if not self.service.records:
+            print("\nNo records to display. Please load data first.")
+            return
+        self.view.display_records(self.service.records, format_type)
 
     def add_record(self):
-        """Add a new record."""
-        if len(self.service.records) >= 100:
-            print("\nMaximum number of records (100) reached. Cannot add more records.")
-            return
-
+        """Add a new record with user input."""
         print("\nEnter record details:")
         try:
-            period = input("Period (e.g., 01/01/1990): ")
-            year = input("Year (e.g., 1990): ")
-            month = input("Month (e.g., January): ")
-            product = input("Product (e.g., Butane): ")
-            origin = input("Origin (e.g., Alberta): ")
-            destination = input("Destination / PADD: ")
-            mode = input("Mode of Transportation: ")
-            volume_m3 = input("Volume (m3): ")
-            volume_bbl = input("Volume (bbl): ")
-            value_cad = input("Value (CN$): ")
-            value_usd = input("Value (US$): ")
-            price_cad_cents_per_l = input("Price (CN cents/L): ")
-            price_usd_cents_per_gal = input("Price (US cents/gallon): ")
-
-            record = Record(
-                period, year, month, product, origin, destination, mode,
-                volume_m3, volume_bbl, value_cad, value_usd,
-                price_cad_cents_per_l, price_usd_cents_per_gal
-            )
+            data = [
+                input("Period (YYYY-MM): "),
+                input("Year: "),
+                input("Month: "),
+                input("Product: "),
+                input("Origin: "),
+                input("Destination: "),
+                input("Mode: "),
+                input("Volume (m3): "),
+                input("Volume (bbl): "),
+                input("Value (CAD): "),
+                input("Value (USD): "),
+                input("Price (CAD cents/L): "),
+                input("Price (USD cents/gal): ")
+            ]
             
+            format_type = input("\nEnter record type (detailed/summary): ").lower()
+            record = self.service.create_record(data, format_type)
             self.service.records.append(record)
             print("\nRecord added successfully!")
             
