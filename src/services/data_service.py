@@ -16,7 +16,7 @@ class DataService:
 
     def __init__(self):
         """Initialize DataService."""
-        self.filename = "data/energy_export_data.csv"
+        self.filename = "data/natural-gas-liquids-exports-monthly.csv"
         self.records = []
         self.headers = []
 
