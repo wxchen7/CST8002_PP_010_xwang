@@ -1,48 +1,58 @@
 """
 CST8002 Programming Language Research Project
 Professor: Stanley Pieda
-Due Date: Feb 16, 2025
+Due Date: March 16, 2025
 Author: Xiaochen Wang
 
 This module contains the ConsoleView class for user interface.
+Supports polymorphic record display.
 """
 
 class ConsoleView:
     def __init__(self):
+        """Initialize ConsoleView with author information."""
         self.author = "Xiaochen Wang"
 
     def display_header(self):
-        """Display program header with author name"""
+        """Display program header with author name."""
         print("\n" + "=" * 50)
         print("CST8002 Energy Export Data Analysis")
         print(f"Program by {self.author}")
         print("=" * 50 + "\n")
 
     def display_menu(self):
-        """Display main menu options"""
+        """Display main menu options."""
         self.display_header()
         print("Menu Options:")
         print("1. Load/Reload Data")
         print("2. Save Data")
-        print("3. Display Records")
-        print("4. Add New Record")
-        print("5. Edit Record")
-        print("6. Delete Record")
-        print("7. Exit")
+        print("3. Display Records (Detailed)")
+        print("4. Display Records (Summary)")
+        print("5. Add New Record")
+        print("6. Edit Record")
+        print("7. Delete Record")
+        print("8. Exit")
 
     def get_user_choice(self):
-        """Get user menu choice"""
-        return input("\nEnter your choice (1-7): ")
+        """Get user menu choice."""
+        return input("\nEnter your choice (1-8): ")
 
-    def display_records(self, records):
-        """Display records with author name every 10 records"""
+    def display_records(self, records, format_type="detailed"):
+        """
+        Display records with polymorphic formatting.
+        
+        Args:
+            records: List of Record objects
+            format_type: String indicating display format ('detailed' or 'summary')
+        """
         if not records:
             print("No records to display.")
             return
 
         for i, record in enumerate(records, 1):
             print(f"\nRecord #{i}:")
-            print(record)
+            # Using polymorphic format_data method
+            print(record.format_data())
             if i % 10 == 0:
                 self.display_header()
 
