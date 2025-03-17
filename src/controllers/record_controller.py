@@ -134,57 +134,20 @@ class RecordController:
             print("\nInvalid input. Please enter a number.")
 
     def delete_record(self):
-        """Delete a record by ID."""
+        """Delete a record by index."""
         if not self.service.records:
-            print("\nNo records to delete.")
+            print("\nNo records to delete. Please load data first.")
             return
 
-        print("\nCurrent Records:")
-        for i, record in enumerate(self.service.records, 1):
-            print(f"\nRecord #{i}")
-            print(f"Record ID: {record.id}")
-            print("Period:", record.period)
-            print("Year:", record.year)
-            print("Product:", record.product)
-            print("Origin:", record.origin)
-            print("Mode:", record.mode)  # add more fields for identification
-            print("-" * 30)
-
-        print("\nProgram by Xiaochen Wang")
+        # Display current records
+        self.display_records()
         
         try:
-            record_id = input("\nEnter the record ID to delete: ").strip()
-            print(f"\nAttempting to delete record with ID: {record_id}")
-            
-            # print the number of records before deletion
-            print(f"Records before deletion: {len(self.service.records)}")
-            
-            found = False
-            for i, record in enumerate(self.service.records):
-                print(f"Checking record #{i+1}:")
-                print(f"  ID: {record.id}")
-                print(f"  Period: {record.period}")
-                print(f"  Product: {record.product}")
-                
-                if record.id == record_id:
-                    # print the detailed information of the record to delete
-                    print(f"\nFound matching record at position {i+1}:")
-                    print(f"  Current record: {record.period}, {record.product}, {record.origin}")
-                    
-                    deleted_record = self.service.records.pop(i)
-                    print(f"\nSuccessfully deleted record #{i+1}:")
-                    print(deleted_record)
-                    found = True
-                    
-                    # print the number of records after deletion
-                    print(f"Records after deletion: {len(self.service.records)}")
-                    break
-            
-            if not found:
-                print(f"\nRecord with ID {record_id} was not found.")
-            
-        except Exception as e:
-            print(f"\nError deleting record: {str(e)}")
-            print(f"Error type: {type(e)}")
-            import traceback
-            traceback.print_exc()
+            index = int(input("\nEnter the record number to delete (1-N): ")) - 1
+            if 0 <= index < len(self.service.records):
+                deleted_record = self.service.records.pop(index)
+                print(f"\nRecord #{index + 1} deleted successfully.")
+            else:
+                print("\nInvalid record number.")
+        except ValueError:
+            print("\nPlease enter a valid number.")

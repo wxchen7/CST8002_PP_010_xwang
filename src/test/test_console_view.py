@@ -55,7 +55,7 @@ class TestConsoleView(unittest.TestCase):
         output = self.held_output.getvalue()
         self.assertIn("Menu Options:", output)
         self.assertIn("1. Load/Reload Data", output)
-        self.assertIn("7. Exit", output)
+        self.assertIn("8. Exit", output)
         print("Menu display test passed!")
 
 if __name__ == '__main__':

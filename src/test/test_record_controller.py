@@ -63,15 +63,10 @@ class TestRecordController(unittest.TestCase):
     def test_delete_record(self):
         """
         Test case: Verify record deletion.
-        Ensures the controller can delete records correctly.
+        Ensures records can be deleted by ID.
         """
         initial_count = len(self.service.records)
-        # Simulate user input for deletion
-        sys.stdin = io.StringIO("1\n")  # Select first record
-
         self.controller.delete_record()
-
-        # Verify record was deleted
         self.assertEqual(len(self.service.records), initial_count - 1)
         print("Delete record test passed!")
 
