@@ -48,11 +48,32 @@ class ConsoleView:
         if not records:
             print("No records to display.")
             return
-
+        
+        from src.models.record import DetailedRecord, SummaryRecord
+        
         for i, record in enumerate(records, 1):
             print(f"\nRecord #{i}:")
-            # Using polymorphic format_data method
-            print(record.format_data())
+            
+            # 根据选择的format_type临时创建对应类型的记录
+            if format_type.lower() == "detailed":
+                # 创建详细记录类型
+                temp_record = DetailedRecord(
+                    record.period, record.year, record.month, record.product,
+                    record.origin, record.destination, record.mode, record.volume_m3,
+                    record.volume_bbl, record.value_cad, record.value_usd,
+                    record.price_cad_cents_per_l, record.price_usd_cents_per_gal
+                )
+                print(temp_record.format_data())
+            else:  # summary
+                # 创建摘要记录类型
+                temp_record = SummaryRecord(
+                    record.period, record.year, record.month, record.product,
+                    record.origin, record.destination, record.mode, record.volume_m3,
+                    record.volume_bbl, record.value_cad, record.value_usd,
+                    record.price_cad_cents_per_l, record.price_usd_cents_per_gal
+                )
+                print(temp_record.format_data())
+            
             if i % 10 == 0:
                 self.display_header()
 
