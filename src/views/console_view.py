@@ -31,11 +31,12 @@ class ConsoleView:
         print("5. Add New Record")
         print("6. Edit Record")
         print("7. Delete Record")
-        print("8. Exit")
+        print("8. Multi-Column Sort")
+        print("9. Exit")
 
     def get_user_choice(self):
         """Get user menu choice."""
-        return input("\nEnter your choice (1-8): ")
+        return input("\nEnter your choice (1-9): ")
 
     def display_records(self, records, format_type="detailed"):
         """
