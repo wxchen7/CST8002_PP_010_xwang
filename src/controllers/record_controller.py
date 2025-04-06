@@ -51,6 +51,8 @@ class RecordController:
             elif choice == '7':
                 self.delete_record()
             elif choice == '8':
+                self.multi_column_sort()
+            elif choice == '9':
                 print("\nExiting program...")
                 break
             else:
@@ -151,3 +153,60 @@ class RecordController:
                 print("\nInvalid record number.")
         except ValueError:
             print("\nPlease enter a valid number.")
+            
+    def multi_column_sort(self):
+        """Sort records based on multiple columns."""
+        if not self.service.records:
+            print("\nNo records to sort. Please load data first.")
+            return
+            
+        # Show available columns to sort by
+        available_columns = [
+            'period', 'year', 'month', 'product', 'origin', 'destination',
+            'mode', 'volume_m3', 'volume_bbl', 'value_cad', 'value_usd',
+            'price_cad_cents_per_l', 'price_usd_cents_per_gal'
+        ]
+        
+        print("\nAvailable columns for sorting:")
+        for i, column in enumerate(available_columns, 1):
+            print(f"{i}. {column}")
+        
+        # Get columns to sort by
+        try:
+            sort_columns = []
+            sort_orders = []
+            
+            # Get number of columns to sort by
+            num_columns = int(input("\nHow many columns do you want to sort by? (1-3): "))
+            if num_columns < 1 or num_columns > 3:
+                print("Invalid number. Please enter a number between 1 and 3.")
+                return
+                
+            for i in range(num_columns):
+                # Get column selection
+                column_num = int(input(f"\nSelect column #{i+1} (1-{len(available_columns)}): "))
+                if 1 <= column_num <= len(available_columns):
+                    selected_column = available_columns[column_num - 1]
+                    sort_columns.append(selected_column)
+                    
+                    # Get sort direction
+                    direction = input(f"Sort {selected_column} in ascending order? (y/n): ").lower()
+                    sort_orders.append(direction == 'y')
+                else:
+                    print("Invalid column number.")
+                    return
+            
+            # Perform the sort
+            sorted_records = self.service.sort_records_multi_column(sort_columns, sort_orders)
+            
+            # Update the records in service
+            self.service.records = sorted_records
+            
+            # Display sorted records
+            print("\nRecords sorted successfully!")
+            self.display_records()
+            
+        except ValueError:
+            print("\nInvalid input. Please enter valid numbers.")
+        except Exception as e:
+            print(f"\nError sorting records: {str(e)}")
